@@ -1,31 +1,51 @@
 
-def check_if_paid_correct_amount(path):
+def check_if_paid_correct_amount(payment_data_filename):
+#create a function w/ parameter of filename 
+
   """Given path of report, look through file of customers for unfulfilled invoices
 
   prints out customer name, amount pd, and total of invoice for customers 
   with outstanding bills, and with overpaid bills (store credit)
   """
-  delivery_log = open(path)
+  
+  payment_data = open(payment_data_filename)
+  #open the filename and save into identifier 
 
-  for line in delivery_log:
-    line = line.rstrip()
-    words = line.split('|')
+  for line in payment_data:
+  #run a for loop over each line of the data in the file 
 
-    name = words[1]
-    melons_ordered = words[2]
+    line = line.rstrip()  #strip extra spacing from the line
+    words = line.split('|')   #create a list out of the components divided with |
+
+    name = words[1]   
+    #each line's second component = name
+    
+    melons_ordered = float(words[2])   
+    #each line's 3rd component = num of melons ordered, turn it into a float
+    
     amount_paid = float(words[3])
+    #each line's 4th component = amount paid, turn it into a float
 
-    invoice_total = float(melons_ordered) * 1.00 
+    invoice_total = melons_ordered * 1.00   #multiply ordered num by the cost
 
     if invoice_total > amount_paid:
-      print(f"{name} paid ${amount_paid:.2f}. Expected ${invoice_total:.2f}. OWES ${invoice_total - amount_paid:.2f}.")
-    
-    elif invoice_total < amount_paid:
-      print(f"{name} paid ${amount_paid:.2f}. Expected ${invoice_total:.2f}. CREDIT of ${amount_paid - invoice_total:.2f}.")
+    #start an conditional for underpaid customers 
 
-  delivery_log.close()
+      print(f"{name} paid ${amount_paid:.2f}. Expected ${invoice_total:.2f}. OWES ${invoice_total - amount_paid:.2f}.")
+      #display the amount they paid and the amount they owe
+
+    elif invoice_total < amount_paid:
+    #start a conditional for the overpaid customers (one was included in the original file)
+      
+      print(f"{name} paid ${amount_paid:.2f}. Expected ${invoice_total:.2f}. CREDIT of ${amount_paid - invoice_total:.2f}.")
+      #display the amount they paid and the amount they are credited extra from this transaction
+
+  payment_data.close()
+  #close the file
 
 check_if_paid_correct_amount("customer-orders.txt")
+#call the function, passing in the file name as the argument 
+
 
 
 ##OLD FILE
